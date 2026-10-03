@@ -5,12 +5,6 @@
   "description": "A collection of tools for Unity development.",
   "author": {
     "name": "Farhan Afzal"
-  },
-
-  "dependencies": {
-    "com.demigiant.dotween": "https://github.com/Demigiant/dotween.git"
-
   }
-  
 
 }
