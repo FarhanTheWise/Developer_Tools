@@ -2,7 +2,8 @@
     "name": "FarhanAfzal.Tools",
     "rootNamespace": "",
     "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:a51459f23cf5f7a4bb8ec2b26497764a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
