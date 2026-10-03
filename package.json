@@ -6,10 +6,11 @@
   "author": {
     "name": "Farhan Afzal"
   },
-  
-    "dependencies": {
-      "com.demigiant.dotween": "https://github.com/YOUR_USERNAME/dotween-upm.git"
-    }
+
+  "dependencies": {
+    "com.demigiant.dotween": "https://github.com/Demigiant/dotween.git"
+
+  }
   
 
 }
