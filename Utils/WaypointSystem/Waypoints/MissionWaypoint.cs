@@ -1,4 +1,3 @@
-using FPSAssets._Scripts.Player;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,20 +7,26 @@ using UnityEngine.UI;
 public class MissionWaypoint : MonoBehaviour
 {
     public bool turnOnDistance;
-    public FPS_Movement playerObject;
     public float screenPadding = 40f;
     public Image wayPointImage;
     //public Transform target;
     public TextMeshProUGUI distanceRemaining;
     public Vector3 waypointOffset;
     public Camera cam;
-   
+
+    private Transform playerObject;
+
 
     public void Enable()
     {
         cam = Camera.main;
         if(distanceRemaining != null) distanceRemaining.gameObject.SetActive(turnOnDistance);
         Invoke(nameof(StartWaypoint) , 0.2f);
+    }
+
+    public void SetPlayerObject(Transform player)
+    {
+        playerObject = player;
     }
 
     private void StartWaypoint()

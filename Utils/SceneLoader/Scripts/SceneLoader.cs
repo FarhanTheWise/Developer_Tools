@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using DG.Tweening;
-using Unity.VisualScripting;
 
 
 public class SceneLoader : MonoBehaviour
@@ -18,7 +17,7 @@ public class SceneLoader : MonoBehaviour
     [Header("Scene Settings")]
     public bool isTesting;
     public SceneLoad currentModeScene;
-    public int envLoad;
+    // public int envLoad;
     public List<SceneSequence> sceneSequence;
 
     [Header("Splash Screen")]
@@ -31,18 +30,18 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private Image progressBar;
     public Image loadingBgImage;
     public CanvasGroup fadeImage;
-    public TextMeshProUGUI modeNameTxt;
-    public TextMeshProUGUI modeDescription;
-    public TextMeshProUGUI loadingText;
+    // public TextMeshProUGUI modeNameTxt;
+    // public TextMeshProUGUI modeDescription;
+    // public TextMeshProUGUI loadingText;
 
 
     public List<Scene> currentScenes;
     public List<SceneObject> currentSelectedScenes;
     private bool isLoading;
     private SceneSequence currentSceneSequence;
-    private Queue<string> loadingStrings;
-    private float nextTextProgress = 0.125f;
-    private readonly float textStep = 0.125f;
+    // private Queue<string> loadingStrings;
+    // private float nextTextProgress = 0.125f;
+    // private readonly float textStep = 0.125f;
 
     private void Awake()
     {
@@ -57,9 +56,9 @@ public class SceneLoader : MonoBehaviour
             return;
         }
         
-        SetEnvLoad(0);
+        //SetEnvLoad(0);
         currentScenes = new List<Scene>();
-        splashScreen.SetActive(true);
+        //splashScreen.SetActive(true);
         LoadLevel(SceneLoad.MainMenu);
     }
 
@@ -99,9 +98,9 @@ public class SceneLoader : MonoBehaviour
             currentSelectedScenes.Clear();
         }
 
-        if(sceneSequence[loadScene.GetHashCode()].envScenes.Count > 0) 
-            SetEnvLoad(Random.Range(0, sceneSequence[loadScene.GetHashCode()].envScenes.Count));
-        else SetEnvLoad(0);
+        // if(sceneSequence[loadScene.GetHashCode()].envScenes.Count > 0) 
+        //     SetEnvLoad(Random.Range(0, sceneSequence[loadScene.GetHashCode()].envScenes.Count));
+        // else SetEnvLoad(0);
     
 
         currentModeScene = loadScene;
@@ -110,89 +109,31 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadRoutine(loadScene));
     }
 
-    private void UpdateLoadingText(float progress)
-{
-    if (loadingText == null)
-        return;
+    //     private void UpdateLoadingText(float progress)
+    // {
+    //     if (loadingText == null)
+    //         return;
 
-    if(loadingStrings.Count <= 0) return;
+    //     if(loadingStrings.Count <= 0) return;
 
-    if (progress >= nextTextProgress)
-    {
-        if (loadingStrings.Count > 0)
-        {
-            loadingText.text = loadingStrings.Dequeue();
-        }
+    //     if (progress >= nextTextProgress)
+    //     {
+    //         if (loadingStrings.Count > 0)
+    //         {
+    //             loadingText.text = loadingStrings.Dequeue();
+    //         }
 
-        nextTextProgress += textStep;
-    }
+    //         nextTextProgress += textStep;
+    //     }
 
-}
-
-    public void SetEnvLoad(int index)
-    {
-        envLoad = index;
-        //DataManager.instance.sessionData.currentMap = envLoad;
-    }
-
-    public void LoadLevelCTF(int mapIndex)
-    {
-        if (isLoading)
-            return;
-
-        envLoad = 0;
-
-        if (currentSelectedScenes.Count > 0) currentSelectedScenes.Clear();
-        SetEnvLoad(mapIndex);
-        currentModeScene = SceneLoad.CtfMode_Scene;
-        //DataManager.instance.sessionData.currentMode = currentModeScene.GetHashCode();
-        progressBar.fillAmount = 0f;
-        StartCoroutine(LoadRoutine(currentModeScene));
-    }
-
-    public void LoadLevelZone(int mapIndex)
-    {
-        if (isLoading)
-            return;
-
-        envLoad = 0;
-
-        if (currentSelectedScenes.Count > 0) currentSelectedScenes.Clear();
-        SetEnvLoad(mapIndex);
-        currentModeScene = SceneLoad.ZoneControl_Scene;
-        //DataManager.instance.sessionData.currentMode = currentModeScene.GetHashCode();
-        progressBar.fillAmount = 0f;
-        StartCoroutine(LoadRoutine(currentModeScene));
-    }
-
-    public void LoadLevelZombie(int mapIndex)
-    {
-        if (isLoading)
-            return;
-
-
-        if (currentSelectedScenes.Count > 0) currentSelectedScenes.Clear();
-        currentModeScene = SceneLoad.ZombieMode_Scene;
-        //DataManager.instance.sessionData.currentMode = currentModeScene.GetHashCode();
-        SetEnvLoad(mapIndex);
-        progressBar.fillAmount = 0f;
-        StartCoroutine(LoadRoutine(currentModeScene));
-    }
-
+    // }
 
     private IEnumerator LoadRoutine(SceneLoad loadScenes)
 {
     isLoading = true;
-
-    if(AdsManager.instance)
-    {
-        AdsManager.instance.HideBanner();
-        AdsManager.instance.HideRectBanner();
-    }
-
     currentSceneSequence = sceneSequence[loadScenes.GetHashCode()];
-    SetLoadingScreen(currentSceneSequence);
-    loadingStrings = new Queue<string>(currentSceneSequence.loadingTextStrings);
+    //SetLoadingScreen(currentSceneSequence);
+    //loadingStrings = new Queue<string>(currentSceneSequence.loadingTextStrings);
 
     yield return FadeLoadingScreen(true);
 
@@ -223,13 +164,15 @@ public class SceneLoader : MonoBehaviour
     // PREPARE SCENE LIST
     // -------------------------
 
-    if (currentSceneSequence.envScenes.Count > 0)
+    if (currentSceneSequence.envScene != null)
     {
-        var envScene = currentSceneSequence.envScenes[envLoad];
-        currentSelectedScenes.Add(envScene);
+        currentSelectedScenes.Add(currentSceneSequence.envScene);
     }
 
-    currentSelectedScenes.Add(currentSceneSequence.controlScene);
+    foreach(var controlScene in currentSceneSequence.controlScenes)
+    {
+        currentSelectedScenes.Add(controlScene);
+    }
 
     // -------------------------
     // FAKE LOADING BAR
@@ -245,7 +188,7 @@ public class SceneLoader : MonoBehaviour
 
         progressBar.fillAmount = Mathf.Clamp01(progress);
 
-        UpdateLoadingText(progress);
+        //UpdateLoadingText(progress);
 
         yield return null;
     }
@@ -293,16 +236,16 @@ public class SceneLoader : MonoBehaviour
 }
     
 
-    private void SetLoadingScreen(SceneSequence currentSequence)
-    {
-        if(currentSequence.loadingBgSprites.Count > 0)
-        {
-            loadingBgImage.sprite = currentSequence.loadingBgSprites[envLoad];
-        }
+    // private void SetLoadingScreen(SceneSequence currentSequence)
+    // {
+    //     if(currentSequence.loadingBgSprites.Count > 0)
+    //     {
+    //         loadingBgImage.sprite = currentSequence.loadingBgSprites[envLoad];
+    //     }
 
-        modeNameTxt.text = $"{currentSequence.sequenceName}";
-        modeDescription.text = $"{currentSequence.loadingDescriptions[Random.Range(0, currentSequence.loadingDescriptions.Count)]}";
-    }
+    //     modeNameTxt.text = $"{currentSequence.sequenceName}";
+    //     modeDescription.text = $"{currentSequence.loadingDescriptions[Random.Range(0, currentSequence.loadingDescriptions.Count)]}";
+    // }
 
 
     private IEnumerator FadeLoadingScreen(bool fadeIn)
@@ -317,9 +260,9 @@ public class SceneLoader : MonoBehaviour
         }
         else
         {
-            loadingText.text = "";
+           // loadingText.text = "";
             fadeImage.alpha = 1f;
-            nextTextProgress = textStep;
+           // nextTextProgress = textStep;
             loadingScreen.SetActive(true); 
 
             yield return new WaitForSeconds(fadeRemainDuration);
@@ -345,12 +288,12 @@ public class SceneSequence
 {
     [Header("Scene Settings")]
     public string sequenceName;
-    public SceneObject controlScene;
-    public List<SceneObject> envScenes;
+    public List<SceneObject> controlScenes;
+    public SceneObject envScene;
 
     [Header("Load Settings")]
     public float loadingDuration;
-    public List<string> loadingDescriptions;
-    public List<string> loadingTextStrings;
-    public List<Sprite> loadingBgSprites;
+    // public List<string> loadingDescriptions;
+    // public List<string> loadingTextStrings;
+    // public List<Sprite> loadingBgSprites;
 }

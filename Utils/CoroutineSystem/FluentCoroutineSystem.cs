@@ -41,11 +41,6 @@ public class FluentCoroutineSystem
         return this;
     }
     
-    public FluentCoroutineSystem AddAction(Action<Item> action, Item item)
-    {
-        sequenceSteps.Enqueue(ActionWrapper(action, item));
-        return this;
-    }
     
     public FluentCoroutineSystem AddWait(float waitTime)
     {
@@ -94,13 +89,7 @@ public class FluentCoroutineSystem
         yield break;
     }
    
-    private IEnumerator ActionWrapper(Action<Item> action, Item item)
-    {
-        action?.Invoke(item);
-        yield break;
-    }
-   
-    
+ 
     private IEnumerator WaitRoutine(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);

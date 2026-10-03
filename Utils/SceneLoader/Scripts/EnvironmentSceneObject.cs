@@ -14,6 +14,5 @@ public class EnvironmentSceneObject : SceneObject
 
     public override void UnloadScene()
     {
-        GameManager.exitGameMode?.Invoke();
     }
 }

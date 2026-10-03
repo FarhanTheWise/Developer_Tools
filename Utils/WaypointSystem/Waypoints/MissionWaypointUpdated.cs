@@ -1,4 +1,3 @@
-using FPSAssets._Scripts.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +5,7 @@ using UnityEngine.UI;
 public class MissionWaypointUpdated : MonoBehaviour
 {
     public bool turnOnDistance;
-    public FPS_Movement playerObject;
+    public Transform playerObject;
     public float screenPadding = 40f;
     public Image wayPointImage;
     public Image directionImage;
